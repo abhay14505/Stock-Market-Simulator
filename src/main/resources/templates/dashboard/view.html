@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="app-body">
+<div th:replace="~{layout/navbar :: navbar}"></div>
+<main class="container py-5">
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="stat-card h-100">
+                <div class="metric-label">Trader Overview</div>
+                <h1 class="mb-2" th:text="${trader.name}"></h1>
+                <p class="muted-text mb-0" th:text="${trader.email}"></p>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4">
+            <div class="stat-card h-100">
+                <div class="metric-label">Balance</div>
+                <div class="metric-value" th:text="${'Rs ' + #numbers.formatDecimal(trader.balance, 1, 2)}"></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+            <div class="stat-card h-100">
+                <div class="metric-label">Portfolio Value</div>
+                <div class="metric-value" th:text="${'Rs ' + #numbers.formatDecimal(portfolioValue, 1, 2)}"></div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+            <div class="stat-card h-100">
+                <div class="metric-label">Net Worth</div>
+                <div class="metric-value" th:text="${'Rs ' + #numbers.formatDecimal(netWorth, 1, 2)}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div class="surface-card table-panel h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <p class="metric-label mb-1">Portfolio Summary</p>
+                        <h3 class="mb-0">Holdings</h3>
+                    </div>
+                    <a class="btn btn-sm btn-outline-light" th:href="@{/web/portfolio/{id}(id=${trader.userId})}">Full Portfolio</a>
+                </div>
+                <div th:if="${#lists.isEmpty(portfolio)}" class="empty-state">No holdings yet.</div>
+                <div th:unless="${#lists.isEmpty(portfolio)}" class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Stock Name</th>
+                            <th>Qty</th>
+                            <th>Current Price</th>
+                            <th>Total Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="entry : ${portfolio}">
+                            <td th:text="${entry.stockName}"></td>
+                            <td th:text="${entry.quantity}"></td>
+                            <td th:text="${'Rs ' + #numbers.formatDecimal(entry.price, 1, 2)}"></td>
+                            <td th:text="${'Rs ' + #numbers.formatDecimal(entry.totalValue, 1, 2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5">
+            <div class="surface-card table-panel h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <p class="metric-label mb-1">Recent Activity</p>
+                        <h3 class="mb-0">Last 10 Transactions</h3>
+                    </div>
+                    <a class="btn btn-sm btn-outline-warning" th:href="@{/web/transactions/{id}(id=${trader.userId})}">View All</a>
+                </div>
+                <div th:if="${#lists.isEmpty(transactions)}" class="empty-state">No transaction history yet.</div>
+                <div th:unless="${#lists.isEmpty(transactions)}" class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Stock ID</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="transaction : ${transactions}" th:classappend="${transaction.type == 'BUY'} ? 'txn-buy' : 'txn-sell'">
+                            <td th:text="${transaction.type}"></td>
+                            <td th:text="${transaction.stockId}"></td>
+                            <td th:text="${transaction.quantity}"></td>
+                            <td th:text="${'Rs ' + #numbers.formatDecimal(transaction.quantity * transaction.price, 1, 2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-4">
+        <a class="btn btn-accent" th:href="@{/web/trade}">Trade Now</a>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

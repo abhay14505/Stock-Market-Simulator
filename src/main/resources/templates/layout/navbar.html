@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}"><span class="brand-mark">STOCK</span> SIM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <div class="tv-search d-none d-lg-flex ms-lg-4 me-lg-4">Search (Ctrl+K)</div>
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/web/traders}">Traders</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/web/stocks}">Stocks</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/web/trade}">Trade</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

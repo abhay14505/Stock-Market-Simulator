@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="app-body">
+<div th:replace="~{layout/navbar :: navbar}"></div>
+<main class="container py-5">
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="stat-card">
+                <div class="metric-label">Trader</div>
+                <h1 class="mb-2" th:text="${trader.name}"></h1>
+                <p class="muted-text mb-0" th:text="${trader.email}"></p>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="stat-card">
+                <div class="metric-label">Current Balance</div>
+                <div class="metric-value" th:text="${'Rs ' + #numbers.formatDecimal(trader.balance, 1, 2)}"></div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="stat-card">
+                <div class="metric-label">Portfolio Value</div>
+                <div class="metric-value" th:text="${'Rs ' + #numbers.formatDecimal(totalPortfolioValue, 1, 2)}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="surface-card table-panel">
+        <div th:if="${#lists.isEmpty(portfolio)}" class="empty-state">No holdings available for this trader.</div>
+        <div th:unless="${#lists.isEmpty(portfolio)}" class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                <tr>
+                    <th>Stock Name</th>
+                    <th>Qty Held</th>
+                    <th>Current Price</th>
+                    <th>Total Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="entry : ${portfolio}">
+                    <td th:text="${entry.stockName}"></td>
+                    <td th:text="${entry.quantity}"></td>
+                    <td th:text="${'Rs ' + #numbers.formatDecimal(entry.price, 1, 2)}"></td>
+                    <td th:text="${'Rs ' + #numbers.formatDecimal(entry.totalValue, 1, 2)}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="3" class="text-end">Total Portfolio Value</th>
+                    <th th:text="${'Rs ' + #numbers.formatDecimal(totalPortfolioValue, 1, 2)}"></th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
